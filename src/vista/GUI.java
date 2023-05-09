@@ -13,26 +13,26 @@
 package vista;
 
 
+import controlador.ControlDado;
 import controlador.ControlRonda;
 import modelo.Dado;
-import controlador.ControlDado;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-
 public class GUI extends JFrame {
-    private final ImagenDado dados;
+    private static ImagenDado dados;
     public static JFrame frame;
-    private final JPanel fondo, opciones;
-    private final Titulo titulo;
-    private final Listener listener;
-    private JButton btnLanzarDado;
-    private int conteo = 1;
+    private static JPanel fondo, opciones;
+    private static  Titulo titulo;
+    private static  Listener listener;
+    public static JButton btnLanzarDado, btnValidar;
+    private int conteo = 1, dado;
 
-
+    private ControlDado controlDado;
 
     public GUI() {
 
@@ -66,11 +66,22 @@ public class GUI extends JFrame {
     }
 
 
-    private void initGUI() {
+    public static void dragon(int dra) {
+        btnLanzarDado.setEnabled(true);
+        JOptionPane.showConfirmDialog(null
+                , "Has perdido", "INFORMACIÓN", JOptionPane.CLOSED_OPTION);
+        initGUI();
+
+    }
+
+
+    private static void initGUI() {
         btnLanzarDado = new JButton("Lanzar Dado");
-        JPanel panelBotones = new JPanel();
+        btnValidar = new JButton("Validar dados");
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 145));
         panelBotones.setPreferredSize(new Dimension(200, 650));
-        panelBotones.add(btnLanzarDado, BorderLayout.CENTER);
+        panelBotones.add(btnLanzarDado);
+        panelBotones.add(btnValidar);
         panelBotones.setOpaque(false);
         String texto = "Opciones";
         panelBotones.setBorder(titulo.gettitulo(texto));
@@ -80,12 +91,21 @@ public class GUI extends JFrame {
 
     }
 
+    private static void reiniciar(){
+        dados = new ImagenDado();
+        opciones.add(dados.getDadosActivos());
+        opciones.add(dados.getDadsInactivation());
+        opciones.add(dados.getTablaPuntaje());
+        opciones.add(dados.getDadosUtilizados());
+    }
+
 
     public static void main(String[] arg) {
 
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
+
                 GUI vista = new GUI();
 
 
@@ -100,17 +120,34 @@ public class GUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
 
             if (e.getSource() == btnLanzarDado) {
-                Dado dado = new Dado();
-                ControlDado controlDado = new ControlDado(dado, dados);
-                controlDado.LanzarDado();
+
                 String texto2 = "Ronda#" + conteo;
                 ControlRonda controlRonda = new ControlRonda();
                 controlRonda.rondas(conteo);
-                opciones.setBorder(titulo.gettitulo(texto2));
-                conteo++;
-                dados.mostrarBotones();
 
-                if ( controlRonda.rondas(conteo) == true) {
+                System.out.println("Entro en la primera ronda" + conteo);
+
+                if ( controlRonda.rondas(conteo) == 1) {
+                    Dado dado = new Dado();
+                    ControlDado controlDado = new ControlDado(dado, dados);
+                    controlDado.LanzarDado();
+                    opciones.setBorder(titulo.gettitulo(texto2));
+                    dados.mostrarBotones();
+                    System.out.println("Entro en la primera ronda "+conteo);
+                    conteo++;
+                    System.out.println("Entro en la primera ronda "+conteo);
+                    btnLanzarDado.setEnabled(false);
+                }
+                if ( controlRonda.rondas(conteo) == 2 && btnValidar==e.getSource()) {
+                    btnLanzarDado.setEnabled(false);
+                }
+                if ( controlRonda.rondas(conteo) == 3) {
+                    btnLanzarDado.setEnabled(false);
+                }
+                if ( controlRonda.rondas(conteo) == 4) {
+                    btnLanzarDado.setEnabled(false);
+                }
+                if ( controlRonda.rondas(conteo) == 5) {
                     btnLanzarDado.setEnabled(false);
                 }
 
@@ -118,11 +155,15 @@ public class GUI extends JFrame {
             }
 
 
+
         }
+
 
     }
 
-
 }
+
+
+
 
 

@@ -4,24 +4,36 @@ package modelo;
 import javax.swing.*;
 
 public class Ronda {
-
-    private int num = 0;
-    private JButton[] activos = new JButton[10];
-
+    public static int num = 1;
     public Ronda(int num) {
         this.num = num;
     }
 
-    public boolean inhabilitar() {
-        if (num > 5) {
-            return true;
+    public Ronda(){}
+
+    public int inhabilitar() {
+        if (num >= 5) {
+            return 5;
         } else {
-            return false;
+            return 0;
         }
     }
 
-
+    public boolean estadoFinal(int cantidades, int numero){
+        if(cantidades<1 && numero==1){
+            num = numero;
+            return true;
+        }else{
+            if(cantidades<1 && numero==2){
+                num = numero;
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
     public int getNum() {
         return num;
     }
+
 }
